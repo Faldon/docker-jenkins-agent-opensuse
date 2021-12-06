@@ -31,11 +31,6 @@ RUN zypper -n install git sudo curl openssl openssh && zypper clean
 # Install Java 8
 RUN zypper -n install java-1_8_0-openjdk && zypper clean
 
-# Install jenkins jnlp
-RUN curl --create-dirs -sSLo /usr/share/jenkins/agent.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
-    && chmod 755 /usr/share/jenkins \
-    && chmod 644 /usr/share/jenkins/agent.jar
-
 RUN sed -i /etc/ssh/sshd_config \
         -e 's/#PermitRootLogin.*/PermitRootLogin no/' \
         -e 's/#RSAAuthentication.*/RSAAuthentication yes/'  \
@@ -44,7 +39,7 @@ RUN sed -i /etc/ssh/sshd_config \
         -e 's/#LogLevel.*/LogLevel INFO/' && \
     mkdir /var/run/sshd
 
-ENV JAVA_HOME=/opt/java/openjdk
+ENV JAVA_HOME=/usr/lib64/jvm/jre-1.8.0-openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
 
 # Systemd volume
